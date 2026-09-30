@@ -13,8 +13,8 @@ window.POSTCODE_CONFIG = {
   // Where the real agent runs, for the person sitting at this machine.
   localApp: "http://127.0.0.1:7860/",
 
-  // Windows installer, published as a release asset.
-  release: "https://github.com/anshkatyan749-ui/postcode/releases/latest/download/Postcode%20Installer.exe",
+  // Windows installer, published as a release asset (GitHub replaces spaces with dots).
+  release: "https://github.com/anshkatyan749-ui/postcode/releases/latest/download/Postcode.Installer.exe",
 
   supportEmail: "hello@postcode.dev"
 };
