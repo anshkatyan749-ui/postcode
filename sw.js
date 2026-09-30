@@ -1,5 +1,6 @@
 // Offline shell for the site. Network first so a deploy shows up, cache as the fallback.
-const CACHE = 'postcode-site-v1';
+// HTML is never served from cache: a stale page next to fresh assets breaks the sign-in flow.
+const CACHE = 'postcode-site-v2';
 const SHELL = [
   './', './index.html', './signup.html', './profile.html', './config.js', './auth.js', './app.js',
   './meadow.js', './manifest.webmanifest',
@@ -23,6 +24,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET' || new URL(request.url).origin !== location.origin) return;
+  if (request.mode === 'navigate') return;   // always the live page
   event.respondWith(
     fetch(request)
       .then(response => {
