@@ -73,7 +73,7 @@ export default {
     if (!email) return json({ error: "A valid email address is required" }, 400);
 
     const row = {
-      kind: ["signup", "signin", "questionnaire", "booking"].includes(body.kind) ? body.kind : "unknown",
+      kind: ["signup", "signin", "profile", "download", "questionnaire", "booking"].includes(body.kind) ? body.kind : "unknown",
       email,
       provider: clean(body.provider, 20),
       name: clean(body.name, 120),
