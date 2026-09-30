@@ -1,0 +1,21 @@
+{
+  "name": "Postcode — local coding agent",
+  "short_name": "Postcode",
+  "description": "A local coding agent that plans, writes, runs and verifies apps on your own machine.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0a09",
+  "theme_color": "#0b0a09",
+  "categories": ["developer", "productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Download", "url": "./#get" },
+    { "name": "Book a demo", "url": "./#book" }
+  ]
+}

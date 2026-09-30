@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anshkatyan749-ui.github.io/postcode/sitemap.xml

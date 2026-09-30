@@ -1,0 +1,12 @@
+name = "postcode-leads"
+main = "worker.js"
+compatibility_date = "2026-09-30"
+
+# Create the database once, then paste the id it prints here:
+#   npx wrangler d1 create postcode-leads
+database_id = "PASTE-DATABASE-ID-HERE"
+database_name = "postcode-leads"
+
+# Send every submission to Cloudflare's own logs too, so nothing is invisible.
+[observability]
+enabled = true

@@ -3,9 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>postcode — a coding agent that runs on your machine</title>
-<meta name="description" content="Download one file. Chat, plan, build and preview apps locally. Keys encrypted, data yours.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Postcode — a local coding agent that runs on your machine</title>
+<meta name="description" content="Postcode is a local coding agent: chat, plan, build and run apps on your own machine. Download one file, keys stay encrypted, data stays yours.">
+<meta name="theme-color" content="#0b0a09">
+<link rel="canonical" href="https://anshkatyan749-ui.github.io/postcode/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Postcode">
+<meta property="og:title" content="Postcode — a local coding agent">
+<meta property="og:description" content="Download one file. It plans, writes, runs and proves your app works, entirely on your machine.">
+<meta property="og:url" content="https://anshkatyan749-ui.github.io/postcode/">
+<meta property="og:image" content="https://anshkatyan749-ui.github.io/postcode/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Postcode — a local coding agent">
+<meta name="twitter:description" content="Download one file. It plans, writes, runs and proves your app works, entirely on your machine.">
+<meta name="keywords" content="postcode, coding agent, local ai, offline coding assistant, ai developer tool, claude code alternative, opencode">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Postcode",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Windows, macOS, Linux",
+  "url": "https://anshkatyan749-ui.github.io/postcode/",
+  "downloadUrl": "https://github.com/anshkatyan749-ui/postcode/releases/latest",
+  "description": "A local coding agent that plans, writes, runs and verifies apps on your own machine.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": ["Local-first chat with 140+ providers", "Structured plans", "Live preview with browser verification", "Encrypted API keys", "GitHub skill installs"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Does Postcode send my code anywhere?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Postcode runs on your machine, your API keys are encrypted on disk and your chats live in a local SQLite file." } },
+    { "@type": "Question", "name": "How do I get it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Download postcode installer.exe and run it. No installer wizard, no terminal." } }
+  ]
+}
+</script>
+<script src="config.js"></script>
 <style>
 :root{
   --bg:#0b0a09; --bg-2:#0f0d0b; --panel:#141210;
@@ -36,6 +77,8 @@ img{display:block;max-width:100%}
 .nav-links a{transition:color .18s}
 .nav-links a:hover{color:var(--fg)}
 .nav-tail{margin-left:auto;display:flex;align-items:center;gap:10px}
+.badge{font-family:var(--mono);font-size:12px;color:var(--fg-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:5px 9px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:13px;
   font-weight:600;padding:10px 18px;border-radius:var(--r);border:1px solid var(--line-2);
@@ -136,6 +179,51 @@ h1{font-family:var(--mono);font-size:clamp(34px,5.2vw,68px);line-height:1.06;let
 .alt a{color:var(--fg-2);border-bottom:1px solid var(--line-2)}
 .alt a:hover{color:var(--fg);border-color:var(--accent)}
 
+.trust{margin-top:34px;display:flex;flex-direction:column;gap:14px;max-width:52ch}
+.trust div{border-left:1px solid var(--line-2);padding-left:14px}
+.trust b{display:block;font-family:var(--mono);font-size:13.5px}
+.trust span{display:block;margin-top:5px;font-size:13.5px;color:var(--fg-2)}
+.grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:64px;align-items:start}
+.auth-card{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--bg-2);padding:22px}
+.tabs{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.tab{flex:1;background:var(--bg-2);border:0;color:var(--fg-2);font-family:var(--mono);font-size:12.5px;padding:9px;cursor:pointer}
+.tab.on{background:var(--panel);color:var(--fg)}
+.btn.google{background:var(--panel);border-color:var(--line-2);color:var(--fg)}
+.btn.google:hover{border-color:var(--fg-3)}
+.or{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--fg-3);font-family:var(--mono);font-size:11.5px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.fl{display:block;margin:14px 0 6px;font-family:var(--mono);font-size:12px;color:var(--fg-2)}
+.fi{width:100%;background:var(--input-bg,#12100e);border:1px solid var(--line-2);border-radius:var(--r);
+  padding:10px 12px;color:var(--fg);font-family:var(--font-mono,ui-monospace,Consolas,monospace);font-size:13.5px}
+.fi:focus{outline:0;border-color:var(--accent)}
+textarea.fi{resize:vertical}
+.ferr{margin:8px 0 0;color:#e06c6c;font-family:var(--mono);font-size:12px}
+.fnote{margin:14px 0 0;color:var(--fg-3);font-family:var(--mono);font-size:11.5px;line-height:1.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qform{margin-top:40px;max-width:640px;display:flex;flex-direction:column;gap:18px}
+.qrow span{display:block;margin-bottom:8px;font-family:var(--mono);font-size:13px;color:var(--fg-2)}
+.done{margin-top:28px;border:1px solid var(--line-2);border-left:2px solid var(--ok);border-radius:var(--r);
+  background:var(--panel);padding:16px 18px;max-width:640px}
+.done b{font-family:var(--mono);font-size:14px;color:var(--ok)}
+.done p{margin-top:8px;color:var(--fg-2);font-size:14px;line-height:1.7}
+.ticks{margin-top:28px;list-style:none;display:flex;flex-direction:column;gap:10px;max-width:48ch}
+.ticks li{position:relative;padding-left:24px;color:var(--fg-2);font-size:15px}
+.ticks li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;border-radius:50%;
+  background:var(--ok);box-shadow:0 0 8px rgb(158 206 106/.5)}
+.cookie-grid{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.cookie-grid div{background:var(--bg);padding:20px}
+.cookie-grid b{display:block;font-family:var(--mono);font-size:14px}
+.cookie-grid span{display:block;margin-top:8px;font-size:13.5px;color:var(--fg-2);line-height:1.65}
+#cookieBar{position:fixed;left:0;right:0;bottom:0;z-index:95;border-top:1px solid var(--line-2);
+  background:rgba(12,11,9,.96);backdrop-filter:blur(8px);padding:16px 22px}
+#cookieBar[hidden]{display:none}
+.cookie-in{max-width:var(--wide);margin:0 auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.cookie-in p{flex:1;min-width:260px;color:var(--fg-2);font-size:13.5px}
+.cookie-in a{color:var(--fg);border-bottom:1px solid var(--line-2)}
+@media(max-width:1000px){.grid-2{grid-template-columns:1fr;gap:34px}}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
 footer{border-top:1px solid var(--line);padding:30px 0}
 .pop{position:fixed;inset:0;z-index:90;background:rgba(6,5,5,.72);backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:22px}
@@ -185,12 +273,12 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <nav class="nav-links">
       <a href="#work">work</a>
       <a href="#engine">engine</a>
-      <a href="#facts">security</a>
-      <a href="#install">install</a>
+      <a href="#signup">sign up</a>
+      <a href="#book">book a demo</a>
     </nav>
     <div class="nav-tail">
-      <a href="/" class="btn btn-sm">open app</a>
-      <a href="/download" class="btn btn-primary btn-sm">get postcode</a>
+      <span class="badge" id="authBadge" hidden></span>
+      <a href="#get" class="btn btn-primary btn-sm">get postcode</a>
     </div>
   </div>
 </header>
@@ -203,8 +291,8 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <h1 data-hero>An agent that lives on your machine.</h1>
     <p class="hero-sub" data-hero>Chat, plan, build, run. It waits for the result to answer before it hands you the link.</p>
     <div class="hero-cta" data-hero>
-      <a href="/download" class="btn btn-primary btn-lg">Download for Windows</a>
-      <a href="/" class="btn btn-lg">Open the app</a>
+      <a href="#get" class="btn btn-primary btn-lg">Download for Windows</a>
+      <a href="#get" class="btn btn-lg">Open the app</a>
     </div>
     <div class="hero-note" data-hero>postcode installer.exe &middot; 69 MB &middot; macOS and Linux from source</div>
   </div>
@@ -250,19 +338,19 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <div class="bento">
       <figure class="card c-a" data-shot>
         <figcaption class="cap"><b>live preview</b><span>the result, embedded</span><em>proof before link</em></figcaption>
-        <div class="shot"><img src="/assets/img/shot-preview.png" alt="Postcode preview view running a generated page on a localhost URL" loading="lazy"></div>
+        <div class="shot"><img src="assets/img/shot-preview.png" alt="Postcode preview view running a generated page on a localhost URL" loading="lazy"></div>
       </figure>
       <figure class="card c-b" data-shot>
         <figcaption class="cap"><b>plan tree</b><em>structured work</em></figcaption>
-        <div class="shot"><img src="/assets/img/shot-plan.png" alt="Postcode plan view showing a structured task tree" loading="lazy"></div>
+        <div class="shot"><img src="assets/img/shot-plan.png" alt="Postcode plan view showing a structured task tree" loading="lazy"></div>
       </figure>
       <figure class="card c-c" data-shot>
         <figcaption class="cap"><b>skills</b><em>github install</em></figcaption>
-        <div class="shot"><img src="/assets/img/shot-skills.png" alt="Postcode skills view listing built-in and installed skills" loading="lazy"></div>
+        <div class="shot"><img src="assets/img/shot-skills.png" alt="Postcode skills view listing built-in and installed skills" loading="lazy"></div>
       </figure>
       <figure class="card c-d" data-shot>
         <figcaption class="cap"><b>session</b><span>chat stays short</span><em>code goes to files</em></figcaption>
-        <div class="shot"><img src="/assets/img/shot-chat.png" alt="Postcode chat view with a short request and answer" loading="lazy"></div>
+        <div class="shot"><img src="assets/img/shot-chat.png" alt="Postcode chat view with a short request and answer" loading="lazy"></div>
       </figure>
     </div>
   </div>
@@ -316,15 +404,15 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <h2 data-reveal>Download it, double click it, work.</h2>
     <p class="lede" data-reveal style="margin-left:auto;margin-right:auto">The executable carries its own runtime. Your data lands in your user folder, so uninstalling is deleting one file.</p>
     <div class="dl-cta" data-reveal style="margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="/download" class="btn btn-primary btn-lg">Download for Windows</a>
-      <a href="/download/source" class="btn btn-lg">Source zip</a>
+      <a href="#get" class="btn btn-primary btn-lg">Download for Windows</a>
+      <a href="#signup" class="btn btn-lg">Create an account</a>
     </div>
     <div class="steps" data-reveal>
       <div><b>1</b>double click Postcode.exe &mdash; nothing to install</div>
       <div><b>2</b>the window opens on 127.0.0.1:7860</div>
       <div><b>3</b>add a provider key, or run on the free models</div>
     </div>
-    <div class="alt" data-reveal>or read the code first &middot; <a href="/download/source">Postcode-app.zip</a></div>
+    <div class="alt" data-reveal>prefer to read it first &middot; <a href="https://github.com/anshkatyan749-ui/postcode">source on GitHub</a></div>
   </div>
 </section>
 </main>
@@ -333,9 +421,165 @@ footer{border-top:1px solid var(--line);padding:30px 0}
   <div class="pop-card" role="dialog" aria-modal="true" aria-label="Download Postcode">
     <div class="pop-bar"><span>download</span><button class="pop-x" id="dlPopX" aria-label="Close">x</button></div>
     <p class="pop-file">postcode installer.exe</p>
-    <p class="pop-note">One file, no installer wizard, no terminal. Double click it and the app window opens. It stores your data in your user folder.</p>
-    <button class="btn btn-primary btn-lg" id="dlPopGo" style="width:100%">Download and start</button>
-    <p class="pop-fine" id="dlPopFine">69 MB &middot; Windows 10 or newer</p>
+    <p class="pop-note">One file, no installer wizard, no terminal. Double click it and the app window opens on this machine. Your keys stay encrypted and your data stays in your user folder.</p>
+    <button class="btn btn-primary btn-lg" id="dlPopGo" style="width:100%">Download from GitHub</button>
+    <p class="pop-fine" id="dlPopFine">69 MB &middot; Windows 10 or newer &middot; macOS and Linux from source</p>
+    <p class="pop-fine" id="dlPopLocal" hidden>Running here? <a id="dlPopLocalLink" href="#">open your local app</a></p>
+  </div>
+</div>
+
+<section id="signup" class="sec">
+  <div class="wrap">
+    <div class="grid-2">
+      <div>
+        <div class="kicker" data-reveal>get access</div>
+        <h2 data-reveal>Create your Postcode account.</h2>
+        <p class="lede" data-reveal>Sign in with Google or an email address. This is what the app asks for the first time you open it, and it is the same account on every machine you install Postcode on.</p>
+        <div class="trust" data-reveal>
+          <div><b>Password rules</b><span>8 or more characters, at least one letter and one number. Nothing is accepted that is not a real address, and query or script input is rejected outright.</span></div>
+          <div><b>What we store</b><span>Your email, and the answers you give below. Keys you add inside the app never leave your machine.</span></div>
+        </div>
+      </div>
+      <div class="auth-card" data-reveal>
+        <div class="tabs">
+          <button class="tab on" data-tab="signup">Sign up</button>
+          <button class="tab" data-tab="signin">Sign in</button>
+        </div>
+
+        <button class="btn google" id="googleBtn" style="width:100%">
+          <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.5 2.6 30.1 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.4 13.3 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.5c0-1.6-.15-3.2-.4-4.7H24v9h12.9c-.6 3-2.3 5.6-4.8 7.3l7.6 5.9c4.4-4.1 7.3-10.1 7.3-17.5z"/><path fill="#FBBC05" d="M10.4 28.7c-.5-1.4-.8-2.9-.8-4.5s.3-3.1.8-4.5l-7.8-6.1C1 16.5 0 20.1 0 24.2s1 7.7 2.6 11.6l7.8-7.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.8 2.3-8.3 2.3-6.3 0-11.6-3.8-13.6-9.3l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+        <p class="or"><span>or with email</span></p>
+
+        <form id="authForm" novalidate>
+          <label class="fl" for="authEmail">Work email</label>
+          <input class="fi" id="authEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com">
+          <p class="ferr" id="authEmailErr" hidden></p>
+
+          <label class="fl" for="authPass">Password</label>
+          <input class="fi" id="authPass" type="password" autocomplete="current-password" placeholder="8+ characters, a letter and a number">
+          <p class="ferr" id="authPassErr" hidden></p>
+
+          <button class="btn btn-primary" id="authGo" type="submit" style="width:100%">Create account</button>
+          <p class="fnote" id="authNote">Signing up stores your email and the answers in the next step. Nothing else.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="questions" class="sec" hidden>
+  <div class="wrap">
+    <div class="kicker" data-reveal>three quick questions</div>
+    <h2 data-reveal>Tell us about you.</h2>
+    <p class="lede" data-reveal>So we can set your defaults sensibly and stop emailing you about things you do not use.</p>
+    <form class="qform" id="qForm" novalidate>
+      <label class="qrow">
+        <span>Are you part of a group of companies?</span>
+        <select class="fi" id="qGroup">
+          <option value="">Choose…</option>
+          <option>Yes, a group of companies</option>
+          <option>No, a single company</option>
+          <option>A freelancer or consultant</option>
+          <option>Prefer not to say</option>
+        </select>
+      </label>
+      <label class="qrow">
+        <span>What is your field?</span>
+        <select class="fi" id="qField">
+          <option value="">Choose…</option>
+          <option>Software engineering</option>
+          <option>Agency or studio</option>
+          <option>Product or design</option>
+          <option>Data or machine learning</option>
+          <option>Education or research</option>
+          <option>Finance or legal</option>
+          <option>Something else</option>
+        </select>
+      </label>
+      <label class="qrow">
+        <span>How did you hear about us?</span>
+        <select class="fi" id="qSource">
+          <option value="">Choose…</option>
+          <option>Codex</option>
+          <option>A colleague or a friend</option>
+          <option>Google search</option>
+          <option>X or Twitter</option>
+          <option>LinkedIn</option>
+          <option>YouTube</option>
+          <option>A blog or a newsletter</option>
+          <option>Somewhere else</option>
+        </select>
+      </label>
+      <button class="btn btn-primary" id="qGo" type="submit">Save my answers</button>
+      <p class="ferr" id="qErr" hidden></p>
+    </form>
+    <div class="done" id="qDone" hidden>
+      <b>Saved.</b>
+      <p id="qDoneText"></p>
+    </div>
+  </div>
+</section>
+
+<section id="book" class="sec">
+  <div class="wrap">
+    <div class="grid-2">
+      <div>
+        <div class="kicker" data-reveal>book a demo call</div>
+        <h2 data-reveal>Twenty minutes, your machine, your project.</h2>
+        <p class="lede" data-reveal>We open Postcode together on your own machine, point it at something real you are building, and you keep everything we produce.</p>
+        <ul class="ticks" data-reveal>
+          <li>Bring a repository or an idea, nothing is required.</li>
+          <li>We run the real agent, not a slide deck.</li>
+          <li>Keys and data never leave your machine.</li>
+        </ul>
+      </div>
+      <form class="auth-card" id="bookForm" novalidate>
+        <div class="two">
+          <div><label class="fl" for="bName">Name</label><input class="fi" id="bName" type="text" autocomplete="name" placeholder="Ada Lovelace"></div>
+          <div><label class="fl" for="bCompany">Company</label><input class="fi" id="bCompany" type="text" autocomplete="organization" placeholder="Acme"></div>
+        </div>
+        <label class="fl" for="bEmail">Work email</label>
+        <input class="fi" id="bEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com">
+        <p class="ferr" id="bEmailErr" hidden></p>
+        <div class="two">
+          <div><label class="fl" for="bDate">Preferred date</label><input class="fi" id="bDate" type="date"></div>
+          <div><label class="fl" for="bSlot">Time slot</label>
+            <select class="fi" id="bSlot">
+              <option value="">Choose…</option>
+              <option>09:00</option><option>10:00</option><option>11:00</option><option>13:00</option>
+              <option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option>
+            </select>
+          </div>
+        </div>
+        <label class="fl" for="bNotes">What should we build?</label>
+        <textarea class="fi" id="bNotes" rows="3" placeholder="A pricing page, an internal tool, an API…"></textarea>
+        <button class="btn btn-primary" id="bGo" type="submit" style="width:100%">Request this slot</button>
+        <p class="fnote" id="bNote">We reply by email within one working day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="cookies" class="sec">
+  <div class="wrap">
+    <div class="kicker">cookies</div>
+    <h2 style="font-size:clamp(22px,2.4vw,30px)">What this site stores, and why</h2>
+    <div class="cookie-grid">
+      <div><b>Strictly necessary</b><span>Your cookie choice and your sign-in state, kept in your browser only. These cannot be switched off because the site would forget you between pages.</span></div>
+      <div><b>Analytics</b><span>Off until you accept. Page views are counted with no cookies, no fingerprinting and no cross-site tracking.</span></div>
+      <div><b>Marketing</b><span>Never used. No ad pixels, no remarketing tags, no data sold or shared.</span></div>
+      <div><b>Your agent data</b><span>Chats, keys and files stay on your machine in the Postcode app. This website never sees them.</span></div>
+    </div>
+  </div>
+</section>
+
+<div id="cookieBar" hidden>
+  <div class="cookie-in">
+    <p>Postcode uses a cookie to remember that you are signed in and which privacy choice you made. Analytics stay off unless you accept them, and we never run marketing trackers. <a href="#cookies">Cookie details</a></p>
+    <button class="btn" id="cookieEssential">Essential only</button>
+    <button class="btn btn-primary" id="cookieAccept">Accept all</button>
   </div>
 </div>
 
@@ -343,14 +587,15 @@ footer{border-top:1px solid var(--line);padding:30px 0}
   <div class="foot-in">
     <span>~/postcode</span>
     <span>local-first coding agent</span>
-    <a href="/landing">home</a>
-    <a href="/">app</a>
-    <a href="/download">download</a>
+    <a href="#top">home</a>
+    <a href="#get">app</a>
+    <a href="#get">download</a>
   </div>
 </footer>
 
-<script src="/assets/vendor/gsap.min.js"></script>
-<script src="/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="app.js" defer></script>
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -380,22 +625,21 @@ footer{border-top:1px solid var(--line);padding:30px 0}
   var pop = document.getElementById('dlPop');
   function openPop(){ pop.hidden = false; document.getElementById('dlPopGo').focus(); }
   function closePop(){ pop.hidden = true; }
-  document.querySelectorAll('a[href="/download"]').forEach(function(a){
+  document.querySelectorAll('a[href="#get"]').forEach(function(a){
     a.addEventListener('click', function(e){ e.preventDefault(); openPop(); });
   });
   document.getElementById('dlPopX').onclick = closePop;
   pop.addEventListener('click', function(e){ if(e.target === pop) closePop(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !pop.hidden) closePop(); });
   document.getElementById('dlPopGo').onclick = function(){
-    var link = document.createElement('a');
-    link.href = '/download';
-    link.download = 'postcode installer.exe';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    document.getElementById('dlPopFine').textContent = 'downloading · run it, do not move it';
-    setTimeout(closePop, 900);
+    window.location.href = (window.POSTCODE_CONFIG && POSTCODE_CONFIG.release) || '#get';
   };
+  if(location.hostname === '127.0.0.1' || location.hostname === 'localhost'){
+    var localLine = document.getElementById('dlPopLocal');
+    var localLink = document.getElementById('dlPopLocalLink');
+    localLine.hidden = false;
+    localLink.href = (window.POSTCODE_CONFIG && POSTCODE_CONFIG.localApp) || '#get';
+  }
 
   // type the terminal out line by line (CSS starts every line at opacity 0)
   var lines = document.querySelectorAll('#termLines .l');
