@@ -1,7 +1,8 @@
 // Offline shell for the site. Network first so a deploy shows up, cache as the fallback.
 const CACHE = 'postcode-site-v1';
 const SHELL = [
-  './', './index.html', './config.js', './app.js', './manifest.webmanifest',
+  './', './index.html', './signup.html', './profile.html', './config.js', './auth.js', './app.js',
+  './meadow.js', './manifest.webmanifest',
   './assets/vendor/gsap.min.js', './assets/vendor/ScrollTrigger.min.js',
   './assets/img/shot-preview.png', './assets/img/shot-plan.png',
   './assets/img/shot-skills.png', './assets/img/shot-chat.png', './favicon.svg'

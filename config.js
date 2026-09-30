@@ -1,20 +1,23 @@
-// One place to point the site at real services. Empty values degrade honestly:
-// submissions queue in the visitor's browser instead of pretending to be sent.
+// One place to point the site at real services. Empty values degrade honestly.
 window.POSTCODE_CONFIG = {
-  // Cloudflare Worker that stores sign-ups, questionnaires and bookings (D1).
-  // Deploy it with: cd worker && npx wrangler deploy   (needs one `wrangler login`)
-  // Then paste the printed URL here and commit.
+  // Cloudflare Worker that stores sign-ups, profiles, downloads and bookings (D1).
+  //   cd worker && npx wrangler login && npx wrangler d1 create postcode-leads
+  //   npx wrangler d1 execute postcode-leads --file=./schema.sql
+  //   npx wrangler deploy      →  paste the URL here
   endpoint: "",
 
-  // Google sign-in. Paste an OAuth 2.0 Web client ID from Google Cloud Console and
-  // add https://anshkatyan749-ui.github.io/postcode/auth/google as a redirect URI.
+  // Google sign-in. This is the only credential I cannot create for you.
+  // 1. console.cloud.google.com → APIs & Services → Credentials
+  // 2. Create Credentials → OAuth client ID → Web application
+  // 3. Authorised JavaScript origins: https://anshkatyan749-ui.github.io
+  // 4. Paste the client id below. The Google button goes live immediately.
   googleClientId: "",
 
-  // Where the real agent runs, for the person sitting at this machine.
+  // Where the pages send people after a successful sign-up.
+  afterSignup: "profile.html",
+  afterProfile: "index.html#get",
+
   localApp: "http://127.0.0.1:7860/",
-
-  // Windows installer, published as a release asset (GitHub replaces spaces with dots).
   release: "https://github.com/anshkatyan749-ui/postcode/releases/latest/download/Postcode.Installer.exe",
-
   supportEmail: "hello@postcode.dev"
 };

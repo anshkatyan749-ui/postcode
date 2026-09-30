@@ -7,17 +7,45 @@ This repository holds the public website. The agent itself ships as a release as
 - Windows installer: [releases/latest](https://github.com/anshkatyan749-ui/postcode/releases/latest)
 - Source: [anshkatyan749-ui/postcode](https://github.com/anshkatyan749-ui/postcode)
 
-## What is here
+## The pages, in the order a visitor meets them
+
+| Page | What it does |
+| --- | --- |
+| `index.html` | The landing page, the download pop-up, demo booking, cookie policy |
+| `signup.html` | Its own page. Left half: a live canvas meadow. Right half: Google sign-in and email sign-in/sign-up. **No skip here.** |
+| `profile.html` | The first page after signing up. Exactly seven questions, and every one of them can be skipped except the username |
+
+Clicking **get postcode** goes to `signup.html`. After a successful sign-up you land on
+`profile.html`; after saving (or skipping) you land on `index.html#get`, the download.
+Signing in and downloading are two different things: the sign-up always succeeds or you stay
+on the sign-in screen. The email path works with no server at all, the account lives in the
+visitor's browser and the submission is queued.
+
+### The seven questions
+
+1. What will you use Postcode for? — Company / Group of companies / Personal use
+2. Company
+3. How did you hear about us? — including Codex
+4. What is your name?
+5. What will be your username? — **required, no skip**
+6. What is your date of birth?
+7. Anything else we should know?
+
+
 
 ```
-index.html            the site: landing, sign-up, questionnaire, booking, cookie policy
-app.js                sign-in, validation, questionnaire, booking, cookie consent, offline queue
+index.html            the site: landing, download, booking, cookie policy
+signup.html           the sign-up page: meadow on one side, Google + email on the other
+profile.html          the seven questions, skip everywhere except the username
+auth.js               validation, the stored account, the send queue, Google Identity Services
+meadow.js             the calm canvas meadow behind the sign-up page
+app.js                download pop-up, booking, cookies, the signed-in welcome
 config.js             one file to point the site at real services
 manifest.webmanifest   installable app (PWA) metadata
 sw.js                 offline shell for the site
 icons/                app icons generated from the mark
 assets/               screenshots and the vendored animation library
-worker/               Cloudflare Worker + D1, stores sign-ups, answers and bookings
+worker/               Cloudflare Worker + D1, stores sign-ups, profiles, downloads and bookings
 sitemap.xml robots.txt 404.html   search engine plumbing
 ```
 
@@ -54,12 +82,17 @@ fake address, query-shaped text or a `.sql` filename is refused.
 
 ## Turning on Google sign-in
 
-1. Google Cloud Console → OAuth 2.0 Client ID → Web application.
-2. Authorised redirect URI: `https://anshkatyan749-ui.github.io/postcode/auth/google`.
-3. Paste the client id into `config.js` as `googleClientId` and commit.
+The button on `signup.html` becomes the real Google Identity Services button the moment a
+client id exists. Without one it says exactly that instead of pretending.
 
-The button is already wired: it does the implicit flow, checks that the token was issued for
-that client id, and continues to the questionnaire.
+1. Google Cloud Console > APIs & Services > Credentials > Create Credentials > OAuth client ID.
+2. Application type: **Web application**.
+3. Authorised JavaScript origin: `https://anshkatyan749-ui.github.io`.
+4. Paste the client id into `config.js` as `googleClientId` and commit.
+
+Google returns a credential; the site checks the token was minted for that client id and that
+the address is verified, then signs the person in exactly like the email path. No redirect
+URI is needed in this flow.
 
 ## Validation rules, everywhere
 

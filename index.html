@@ -273,12 +273,12 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <nav class="nav-links">
       <a href="#work">work</a>
       <a href="#engine">engine</a>
-      <a href="#signup">sign up</a>
       <a href="#book">book a demo</a>
     </nav>
     <div class="nav-tail">
       <span class="badge" id="authBadge" hidden></span>
-      <a href="#get" class="btn btn-primary btn-sm">get postcode</a>
+      <a href="signup.html" class="btn btn-sm" id="navAccount">sign in</a>
+      <a href="signup.html" class="btn btn-primary btn-sm" id="navGet">get postcode</a>
     </div>
   </div>
 </header>
@@ -405,7 +405,7 @@ footer{border-top:1px solid var(--line);padding:30px 0}
     <p class="lede" data-reveal style="margin-left:auto;margin-right:auto">The executable carries its own runtime. Your data lands in your user folder, so uninstalling is deleting one file.</p>
     <div class="dl-cta" data-reveal style="margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="#get" class="btn btn-primary btn-lg">Download for Windows</a>
-      <a href="#signup" class="btn btn-lg">Create an account</a>
+      <a href="signup.html" class="btn btn-lg">Create an account first</a>
     </div>
     <div class="steps" data-reveal>
       <div><b>1</b>double click Postcode.exe &mdash; nothing to install</div>
@@ -428,100 +428,25 @@ footer{border-top:1px solid var(--line);padding:30px 0}
   </div>
 </div>
 
-<section id="signup" class="sec">
+<section id="welcome" class="sec" hidden>
   <div class="wrap">
     <div class="grid-2">
       <div>
-        <div class="kicker" data-reveal>get access</div>
-        <h2 data-reveal>Create your Postcode account.</h2>
-        <p class="lede" data-reveal>Sign in with Google or an email address. This is what the app asks for the first time you open it, and it is the same account on every machine you install Postcode on.</p>
-        <div class="trust" data-reveal>
-          <div><b>Password rules</b><span>8 or more characters, at least one letter and one number. Nothing is accepted that is not a real address, and query or script input is rejected outright.</span></div>
-          <div><b>What we store</b><span>Your email, and the answers you give below. Keys you add inside the app never leave your machine.</span></div>
-        </div>
+        <div class="kicker" data-reveal>your account</div>
+        <h2 data-reveal>Welcome, <span id="welcomeName">friend</span>.</h2>
+        <p class="lede" data-reveal>Your download is ready below. Two quick things still open: your profile details, and a demo slot if you want someone to look at your project with you.</p>
       </div>
       <div class="auth-card" data-reveal>
-        <div class="tabs">
-          <button class="tab on" data-tab="signup">Sign up</button>
-          <button class="tab" data-tab="signin">Sign in</button>
+        <div class="trust" style="margin-top:0">
+          <div><b>username</b><span id="welcomeUsername">not chosen yet</span></div>
+          <div><b>signed in as</b><span id="welcomeEmail">â€”</span></div>
         </div>
-
-        <button class="btn google" id="googleBtn" style="width:100%">
-          <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.5 2.6 30.1 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.4 13.3 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.5c0-1.6-.15-3.2-.4-4.7H24v9h12.9c-.6 3-2.3 5.6-4.8 7.3l7.6 5.9c4.4-4.1 7.3-10.1 7.3-17.5z"/><path fill="#FBBC05" d="M10.4 28.7c-.5-1.4-.8-2.9-.8-4.5s.3-3.1.8-4.5l-7.8-6.1C1 16.5 0 20.1 0 24.2s1 7.7 2.6 11.6l7.8-7.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.8 2.3-8.3 2.3-6.3 0-11.6-3.8-13.6-9.3l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
-          Continue with Google
-        </button>
-        <p class="or"><span>or with email</span></p>
-
-        <form id="authForm" novalidate>
-          <label class="fl" for="authEmail">Work email</label>
-          <input class="fi" id="authEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com">
-          <p class="ferr" id="authEmailErr" hidden></p>
-
-          <label class="fl" for="authPass">Password</label>
-          <input class="fi" id="authPass" type="password" autocomplete="current-password" placeholder="8+ characters, a letter and a number">
-          <p class="ferr" id="authPassErr" hidden></p>
-
-          <button class="btn btn-primary" id="authGo" type="submit" style="width:100%">Create account</button>
-          <p class="fnote" id="authNote">Signing up stores your email and the answers in the next step. Nothing else.</p>
-        </form>
+        <a class="btn btn-primary btn-lg" id="welcomeProfile" href="profile.html" style="width:100%;margin-top:20px">Finish my profile</a>
+        <a class="btn btn-lg" id="welcomeBook" href="#book" style="width:100%;margin-top:10px">Book a demo call</a>
       </div>
     </div>
   </div>
 </section>
-
-<section id="questions" class="sec" hidden>
-  <div class="wrap">
-    <div class="kicker" data-reveal>three quick questions</div>
-    <h2 data-reveal>Tell us about you.</h2>
-    <p class="lede" data-reveal>So we can set your defaults sensibly and stop emailing you about things you do not use.</p>
-    <form class="qform" id="qForm" novalidate>
-      <label class="qrow">
-        <span>Are you part of a group of companies?</span>
-        <select class="fi" id="qGroup">
-          <option value="">Choose…</option>
-          <option>Yes, a group of companies</option>
-          <option>No, a single company</option>
-          <option>A freelancer or consultant</option>
-          <option>Prefer not to say</option>
-        </select>
-      </label>
-      <label class="qrow">
-        <span>What is your field?</span>
-        <select class="fi" id="qField">
-          <option value="">Choose…</option>
-          <option>Software engineering</option>
-          <option>Agency or studio</option>
-          <option>Product or design</option>
-          <option>Data or machine learning</option>
-          <option>Education or research</option>
-          <option>Finance or legal</option>
-          <option>Something else</option>
-        </select>
-      </label>
-      <label class="qrow">
-        <span>How did you hear about us?</span>
-        <select class="fi" id="qSource">
-          <option value="">Choose…</option>
-          <option>Codex</option>
-          <option>A colleague or a friend</option>
-          <option>Google search</option>
-          <option>X or Twitter</option>
-          <option>LinkedIn</option>
-          <option>YouTube</option>
-          <option>A blog or a newsletter</option>
-          <option>Somewhere else</option>
-        </select>
-      </label>
-      <button class="btn btn-primary" id="qGo" type="submit">Save my answers</button>
-      <p class="ferr" id="qErr" hidden></p>
-    </form>
-    <div class="done" id="qDone" hidden>
-      <b>Saved.</b>
-      <p id="qDoneText"></p>
-    </div>
-  </div>
-</section>
-
 <section id="book" class="sec">
   <div class="wrap">
     <div class="grid-2">
@@ -595,6 +520,7 @@ footer{border-top:1px solid var(--line);padding:30px 0}
 
 <script src="assets/vendor/gsap.min.js"></script>
 <script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="auth.js"></script>
 <script src="app.js" defer></script>
 <script>
 (function(){
