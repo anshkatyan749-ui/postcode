@@ -7,39 +7,39 @@ This repository holds the public website. The agent itself ships as a release as
 - Windows installer: [releases/latest](https://github.com/anshkatyan749-ui/postcode/releases/latest)
 - Source: [anshkatyan749-ui/postcode](https://github.com/anshkatyan749-ui/postcode)
 
-## The pages, in the order a visitor meets them
+## How a visitor signs up
 
-| Page | What it does |
+Everything happens on `index.html`; the URL never changes to a second page.
+
+| Piece | What it does |
 | --- | --- |
-| `index.html` | The landing page, the download pop-up, demo booking, cookie policy |
-| `signup.html` | Its own page. Left half: a live canvas meadow. Right half: Google sign-in and email sign-in/sign-up. **No skip here.** |
-| `profile.html` | The first page after signing up. Exactly seven questions, and every one of them can be skipped except the username |
+| **Create New Account** (header) | Pops the sign-up up on the page itself: meadow on the left, Google + email on the right |
+| Google button | The real Google Identity Services button as soon as `googleClientId` exists |
+| Email sign-up | Works with no server; the account lives in the visitor's browser and the submission is queued |
+| The questions | A step-by-step wizard inside the same overlay: a 30% header, one question per screen, no scrolling form |
 
-Clicking **get postcode** goes to `signup.html`. After a successful sign-up you land on
-`profile.html`; after saving (or skipping) you land on `index.html#get`, the download.
-Signing in and downloading are two different things: the sign-up always succeeds or you stay
-on the sign-in screen. The email path works with no server at all, the account lives in the
-visitor's browser and the submission is queued.
+Clicking a role card (Company, Solo developer, Founder, Doctor, Engineer, …) jumps straight to
+the next screen. Choosing Company or Group of companies adds the company-name question; every
+other role goes down the personal path. Signing in and downloading stay two different things:
+the sign-up always succeeds or you stay on the sign-in screen.
 
-### The seven questions
+### The questions, one screen each
 
-1. What will you use Postcode for? — Company / Group of companies / Personal use
-2. Company
-3. How did you hear about us? — including Codex
-4. What is your name?
-5. What will be your username? — **required, no skip**
-6. What is your date of birth?
+1. Tell us about you — Company / Group of companies / Solo developer / Founder / Doctor / Engineer / Teacher / Student / Other
+2. What is your company called? — company path only
+3. What's your date of birth?
+4. What will be your username? — **required, no skip**
+5. What is your name?
+6. How did you hear about us? — including Codex
 7. Anything else we should know?
 
-
-
+Every question except the username can be skipped, and you can go back a screen at any point.
 ```
-index.html            the site: landing, download, booking, cookie policy
-signup.html           the sign-up page: meadow on one side, Google + email on the other
-profile.html          the seven questions, skip everywhere except the username
+index.html            the whole site: landing, sign-up overlay, question wizard,
+                      download pop-up, booking, cookie policy
 auth.js               validation, the stored account, the send queue, Google Identity Services
-meadow.js             the calm canvas meadow behind the sign-up page
-app.js                download pop-up, booking, cookies, the signed-in welcome
+meadow.js             the calm canvas meadow behind the sign-up overlay
+app.js                sign-up overlay, question wizard, download, booking, cookies, welcome
 config.js             one file to point the site at real services
 manifest.webmanifest   installable app (PWA) metadata
 sw.js                 offline shell for the site
@@ -82,8 +82,9 @@ fake address, query-shaped text or a `.sql` filename is refused.
 
 ## Turning on Google sign-in
 
-The button on `signup.html` becomes the real Google Identity Services button the moment a
-client id exists. Without one it says exactly that instead of pretending.
+The Google button in the sign-up overlay becomes the real Google Identity Services button the
+moment a client id exists. A visitor then signs up with their Google account in one click —
+no forms, nothing to fill in.
 
 1. Google Cloud Console > APIs & Services > Credentials > Create Credentials > OAuth client ID.
 2. Application type: **Web application**.

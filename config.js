@@ -13,10 +13,6 @@ window.POSTCODE_CONFIG = {
   // 4. Paste the client id below. The Google button goes live immediately.
   googleClientId: "",
 
-  // Where the pages send people after a successful sign-up.
-  afterSignup: "profile.html",
-  afterProfile: "index.html#get",
-
   localApp: "http://127.0.0.1:7860/",
   release: "https://github.com/anshkatyan749-ui/postcode/releases/latest/download/Postcode.Installer.exe",
   supportEmail: "hello@postcode.dev"

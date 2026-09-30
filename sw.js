@@ -1,9 +1,9 @@
 // Offline shell for the site. Network first so a deploy shows up, cache as the fallback.
 // HTML is never served from cache: a stale page next to fresh assets breaks the sign-in flow.
-const CACHE = 'postcode-site-v2';
+const CACHE = 'postcode-site-v3';
 const SHELL = [
-  './', './index.html', './signup.html', './profile.html', './config.js', './auth.js', './app.js',
-  './meadow.js', './manifest.webmanifest',
+  './', './index.html', './config.js', './auth.js', './app.js',
+  './meadow.js', './manifest.webmanifest', './icons/icon-192.png',
   './assets/vendor/gsap.min.js', './assets/vendor/ScrollTrigger.min.js',
   './assets/img/shot-preview.png', './assets/img/shot-plan.png',
   './assets/img/shot-skills.png', './assets/img/shot-chat.png', './favicon.svg'
