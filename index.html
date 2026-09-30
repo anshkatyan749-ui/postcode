@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>postcode — a coding agent that runs on your machine</title>
+<meta name="description" content="Download one file. Chat, plan, build and preview apps locally. Keys encrypted, data yours.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#0b0a09; --bg-2:#0f0d0b; --panel:#141210;
+  --line:#26221d; --line-2:#332d26;
+  --fg:#efe9e1; --fg-2:#a79e92; --fg-3:#6f675d;
+  --accent:#c96442; --accent-2:#e08a63; --ok:#9ece6a;
+  --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:ui-sans-serif,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  --r:4px; --r-lg:6px; --max:1180px; --wide:1560px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+main{overflow-x:hidden;width:100%;max-width:100%}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:#c9644233}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+::-webkit-scrollbar-track{background:var(--bg)}
+
+#nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:70;background:rgba(11,10,9,.86);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center}
+.nav-in{width:100%;max-width:var(--wide);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:22px}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:14px;font-weight:600}
+.mark .caret{color:var(--accent)}
+.nav-links{display:flex;gap:20px;font-family:var(--mono);font-size:12.5px;color:var(--fg-2)}
+.nav-links a{transition:color .18s}
+.nav-links a:hover{color:var(--fg)}
+.nav-tail{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:13px;
+  font-weight:600;padding:10px 18px;border-radius:var(--r);border:1px solid var(--line-2);
+  background:transparent;color:var(--fg);cursor:pointer;white-space:nowrap;
+  transition:background .18s,border-color .18s,transform .18s cubic-bezier(.16,1,.3,1)}
+.btn:hover{border-color:var(--fg-3);background:var(--panel)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#160d09}
+.btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.btn-lg{padding:14px 26px;font-size:14.5px}
+.btn-sm{padding:7px 13px;font-size:12.5px}
+
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 22px}
+.sec{padding:150px 0;border-top:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:12.5px;color:var(--fg-3)}
+.kicker .accent{color:var(--accent)}
+h2{font-family:var(--mono);font-size:clamp(28px,3.4vw,44px);line-height:1.14;letter-spacing:-.03em;font-weight:600}
+.lede{margin-top:18px;font-size:17px;color:var(--fg-2);max-width:60ch}
+
+#hero{padding:150px 0 0}
+.hero-in{width:100%;max-width:var(--wide);margin:0 auto;padding:0 22px;text-align:center}
+h1{font-family:var(--mono);font-size:clamp(34px,5.2vw,68px);line-height:1.06;letter-spacing:-.035em;font-weight:600;
+  max-width:20ch;margin:22px auto 0}
+.hero-sub{margin:24px auto 0;font-size:18px;color:var(--fg-2);max-width:62ch}
+.hero-cta{margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-note{margin-top:18px;font-family:var(--mono);font-size:12.5px;color:var(--fg-3)}
+
+.term-shell{margin:74px auto 0;width:100%;max-width:var(--wide);padding:0 22px}
+.term{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--bg-2);overflow:hidden;
+  box-shadow:0 50px 120px -60px #000,inset 0 0 0 1px #ffffff06}
+.term-bar{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);
+  background:var(--panel);font-family:var(--mono);font-size:12px;color:var(--fg-3)}
+.term-bar .dot{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.term-bar .dot.live{background:var(--ok);box-shadow:0 0 10px #9ece6a66}
+.term-bar .title{margin-left:6px}
+.term-bar .right{margin-left:auto}
+.term-body{padding:22px 24px 26px;font-family:var(--mono);font-size:13.5px;line-height:1.85;color:var(--fg-2)}
+.term-body .l{display:block;white-space:pre-wrap;word-break:break-word;opacity:0}
+.term-body .cmd{color:var(--fg)}
+.term-body .cmd::before{content:"> ";color:var(--accent)}
+.term-body .k{color:var(--fg-3)}
+.term-body .ok{color:var(--ok)}
+.term-body .url{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px}
+.term-body .caretline::after{content:"";display:inline-block;width:8px;height:15px;background:var(--accent);
+  vertical-align:-2px;margin-left:4px;animation:blink 1.15s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;overflow:hidden;background:var(--bg-2)}
+.strip-track{display:flex;width:max-content;animation:slide 44s linear infinite}
+.strip-track span{font-family:var(--mono);font-size:13px;color:var(--fg-3);padding:0 22px;white-space:nowrap}
+.strip-track span i{color:var(--accent);font-style:normal;margin-left:44px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+.bento{margin-top:64px;display:grid;grid-template-columns:repeat(12,1fr);grid-auto-flow:dense;gap:16px;align-items:start}
+.card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--panel);overflow:hidden;margin:0;
+  display:flex;flex-direction:column;transition:border-color .22s,transform .22s cubic-bezier(.16,1,.3,1)}
+.card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.cap{display:flex;align-items:baseline;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:12.5px;color:var(--fg-2)}
+.cap b{color:var(--fg)}
+.cap em{font-style:normal;color:var(--fg-3);margin-left:auto}
+.shot{overflow:hidden;background:#0d0c0b;height:288px}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top left;transform:scale(1.01);
+  transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.card:hover .shot img{transform:scale(1.045)}
+.c-a .shot,.c-d .shot{height:330px}
+.c-a{grid-column:span 7}
+.c-b{grid-column:span 5}
+.c-c{grid-column:span 5}
+.c-d{grid-column:span 7}
+
+.pin-wrap{width:100%;max-width:var(--wide);margin:0 auto;padding:0 22px;display:grid;
+  grid-template-columns:minmax(0,42%) minmax(0,58%);gap:80px;align-items:start}
+.pin-left{position:sticky;top:110px;padding:150px 0}
+.pin-right{padding:70px 0 40px}
+.row{padding:52px 0;border-top:1px solid var(--line)}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row .n{font-family:var(--mono);font-size:12.5px;color:var(--fg-3)}
+.row h3{font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:-.02em;margin:14px 0 12px}
+.row p{color:var(--fg-2);font-size:15.5px;max-width:52ch}
+.mono-line{margin-top:16px;font-family:var(--mono);font-size:12.5px;color:var(--fg-3);
+  border-left:1px solid var(--line-2);padding-left:12px}
+.mono-line .ok{color:var(--ok)}
+
+.facts{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.fact{background:var(--bg);padding:22px 20px}
+.fact b{display:block;font-family:var(--mono);font-size:15px}
+.fact span{display:block;margin-top:8px;font-size:13.5px;color:var(--fg-2)}
+
+#install{text-align:center;padding:170px 0 150px;border-top:1px solid var(--line)}
+#install h2{max-width:22ch;margin:0 auto}
+.steps{margin-top:44px;display:inline-flex;flex-direction:column;gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;text-align:left}
+.steps div{background:var(--bg);padding:13px 22px;font-family:var(--mono);font-size:13px;color:var(--fg-2)}
+.steps div b{color:var(--accent);margin-right:12px}
+.alt{margin-top:26px;font-family:var(--mono);font-size:13px;color:var(--fg-3)}
+.alt a{color:var(--fg-2);border-bottom:1px solid var(--line-2)}
+.alt a:hover{color:var(--fg);border-color:var(--accent)}
+
+footer{border-top:1px solid var(--line);padding:30px 0}
+.pop{position:fixed;inset:0;z-index:90;background:rgba(6,5,5,.72);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:22px}
+.pop[hidden]{display:none}
+.pop-card{width:100%;max-width:420px;border:1px solid var(--line-2);border-radius:var(--r-lg);
+  background:var(--bg-2);box-shadow:0 40px 90px -40px #000;padding-bottom:22px}
+.pop-bar{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:12px;color:var(--fg-3)}
+.pop-x{margin-left:auto;background:none;border:0;color:var(--fg-3);font-family:var(--mono);
+  font-size:13px;cursor:pointer;padding:2px 6px}
+.pop-x:hover{color:var(--fg)}
+.pop-file{margin:20px 22px 0;font-family:var(--mono);font-size:15px;color:var(--fg)}
+.pop-note{margin:10px 22px 20px;font-size:13.5px;color:var(--fg-2)}
+.pop-card .btn{margin:0 22px;width:calc(100% - 44px)!important}
+.pop-fine{margin:12px 22px 0;font-family:var(--mono);font-size:12px;color:var(--fg-3)}
+.foot-in{width:100%;max-width:var(--wide);margin:0 auto;padding:0 22px;display:flex;gap:18px;
+  align-items:center;font-family:var(--mono);font-size:12.5px;color:var(--fg-3);flex-wrap:wrap}
+.foot-in a:hover{color:var(--fg)}
+#progress{position:fixed;top:56px;left:0;height:1px;width:100%;transform:scaleX(0);transform-origin:left;
+  background:var(--accent);z-index:71}
+
+@media(max-width:1000px){
+  .pin-wrap{grid-template-columns:1fr;gap:0}
+  .pin-left{position:static;padding:110px 0 20px}
+  .c-a,.c-b,.c-c,.c-d{grid-column:span 12}
+  .sec{padding:110px 0}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  h1{max-width:none}
+  .term-body{font-size:12.5px;padding:18px}
+  .hero-cta .btn{width:100%}
+  #hero{padding:120px 0 0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .strip-track{animation:none}
+  .term-body .caretline::after{animation:none}
+  *{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<header id="nav">
+  <div class="nav-in">
+    <a class="mark" href="#hero"><span>~/postcode</span><span class="caret">$</span></a>
+    <nav class="nav-links">
+      <a href="#work">work</a>
+      <a href="#engine">engine</a>
+      <a href="#facts">security</a>
+      <a href="#install">install</a>
+    </nav>
+    <div class="nav-tail">
+      <a href="/" class="btn btn-sm">open app</a>
+      <a href="/download" class="btn btn-primary btn-sm">get postcode</a>
+    </div>
+  </div>
+</header>
+<div id="progress"></div>
+
+<main>
+<section id="hero">
+  <div class="hero-in">
+    <div class="kicker" data-hero><span class="accent">postcode 1.0</span> &nbsp;·&nbsp; one file, nothing to install</div>
+    <h1 data-hero>An agent that lives on your machine.</h1>
+    <p class="hero-sub" data-hero>Chat, plan, build, run. It waits for the result to answer before it hands you the link.</p>
+    <div class="hero-cta" data-hero>
+      <a href="/download" class="btn btn-primary btn-lg">Download for Windows</a>
+      <a href="/" class="btn btn-lg">Open the app</a>
+    </div>
+    <div class="hero-note" data-hero>postcode installer.exe &middot; 69 MB &middot; macOS and Linux from source</div>
+  </div>
+
+  <div class="term-shell" data-term>
+    <div class="term">
+      <div class="term-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot live"></span>
+        <span class="title">postcode &mdash; session 4a1f</span>
+        <span class="right">127.0.0.1:7860</span>
+      </div>
+      <div class="term-body" id="termLines">
+<span class="l cmd">build a pricing page with three tiers</span>
+<span class="l k">plan    5 actions &middot; team bharat, neon, limit</span>
+<span class="l k">write   index.html, styles.css, app.js</span>
+<span class="l k">run     waiting for a port</span>
+<span class="l k">proof   <span class="ok">200 OK &middot; 41 ms</span></span>
+<span class="l k">verify  <span class="ok">Edge &middot; 1240 ms &middot; 0 console errors</span></span>
+<span class="l k">shot    proof saved with the session</span>
+<span class="l k">link    <span class="url">http://127.0.0.1:54100</span></span>
+<span class="l cmd">add a dark mode toggle</span>
+<span class="l k">edit    styles.css &middot; 12 lines</span>
+<span class="l k">proof   <span class="ok">200 OK &middot; 38 ms</span></span>
+<span class="l k">link    <span class="url">http://127.0.0.1:54100</span></span>
+<span class="l cmd">/skills</span>
+<span class="l k">3 built in &middot; 2 installed from github</span>
+<span class="l caretline cmd"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true">
+  <div class="strip-track" id="marquee"></div>
+</div>
+
+<section id="work" class="sec">
+  <div class="wrap">
+    <div class="kicker" data-reveal>what you actually see</div>
+    <h2 data-reveal>A workbench, not a chat log.</h2>
+    <p class="lede" data-reveal>Code leaves the conversation and lands in files you can open, edit and run. Every screenshot below is this app, on this machine.</p>
+
+    <div class="bento">
+      <figure class="card c-a" data-shot>
+        <figcaption class="cap"><b>live preview</b><span>the result, embedded</span><em>proof before link</em></figcaption>
+        <div class="shot"><img src="/assets/img/shot-preview.png" alt="Postcode preview view running a generated page on a localhost URL" loading="lazy"></div>
+      </figure>
+      <figure class="card c-b" data-shot>
+        <figcaption class="cap"><b>plan tree</b><em>structured work</em></figcaption>
+        <div class="shot"><img src="/assets/img/shot-plan.png" alt="Postcode plan view showing a structured task tree" loading="lazy"></div>
+      </figure>
+      <figure class="card c-c" data-shot>
+        <figcaption class="cap"><b>skills</b><em>github install</em></figcaption>
+        <div class="shot"><img src="/assets/img/shot-skills.png" alt="Postcode skills view listing built-in and installed skills" loading="lazy"></div>
+      </figure>
+      <figure class="card c-d" data-shot>
+        <figcaption class="cap"><b>session</b><span>chat stays short</span><em>code goes to files</em></figcaption>
+        <div class="shot"><img src="/assets/img/shot-chat.png" alt="Postcode chat view with a short request and answer" loading="lazy"></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="engine">
+  <div class="pin-wrap">
+    <div class="pin-left">
+      <div class="kicker" data-reveal>the engine</div>
+      <h2 id="scrubWords">Runs where you work, not where someone else's server does.</h2>
+      <p class="lede" data-reveal>One process holds the models, the files and the keys. Nothing is uploaded, and nothing is phoned home.</p>
+      <div class="facts" id="facts" data-reveal>
+        <div class="fact"><b>140+ providers</b><span>one picker, free models included</span></div>
+        <div class="fact"><b>Fernet keys</b><span>sealed on disk, never sent to the client</span></div>
+        <div class="fact"><b>SQLite</b><span>per-user data, admin console included</span></div>
+        <div class="fact"><b>Self proving</b><span>HTTP probe plus a real browser check</span></div>
+      </div>
+    </div>
+    <div class="pin-right" id="rows">
+      <div class="row">
+        <div class="n">provider</div>
+        <h3>Switch models without leaving the composer</h3>
+        <p>OpenAI, Anthropic, Gemini, Groq, DeepSeek, local Ollama. Models are discovered from the provider, not hardcoded.</p>
+        <div class="mono-line">pollinations &middot; free, no key <span class="ok">ready</span></div>
+      </div>
+      <div class="row">
+        <div class="n">plan</div>
+        <h3>Long jobs get a tree, short questions get an answer</h3>
+        <p>Ask for a site and you get a structured plan with a named team. Ask a quiz question and the plan step is skipped.</p>
+        <div class="mono-line">quality auto &middot; quiz &rarr; fast, build &rarr; deep</div>
+      </div>
+      <div class="row">
+        <div class="n">preview</div>
+        <h3>The link appears only while the app answers</h3>
+        <p>Postcode picks a free port, starts the right command, waits for a real response, then opens the page in a browser and reads its console. Only then do you get the link, plus a screenshot as proof.</p>
+        <div class="mono-line">proof <span class="ok">200 OK</span> &rarr; Edge <span class="ok">0 console errors</span> &rarr; link + screenshot</div>
+      </div>
+      <div class="row">
+        <div class="n">skills</div>
+        <h3>Install a skill from a GitHub URL</h3>
+        <p>Type /skills to browse, or /install with a repo URL. The clone is shallow, non-interactive, and time boxed.</p>
+        <div class="mono-line">/install https://github.com/owner/repo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="kicker" data-reveal>install</div>
+    <h2 data-reveal>Download it, double click it, work.</h2>
+    <p class="lede" data-reveal style="margin-left:auto;margin-right:auto">The executable carries its own runtime. Your data lands in your user folder, so uninstalling is deleting one file.</p>
+    <div class="dl-cta" data-reveal style="margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/download" class="btn btn-primary btn-lg">Download for Windows</a>
+      <a href="/download/source" class="btn btn-lg">Source zip</a>
+    </div>
+    <div class="steps" data-reveal>
+      <div><b>1</b>double click Postcode.exe &mdash; nothing to install</div>
+      <div><b>2</b>the window opens on 127.0.0.1:7860</div>
+      <div><b>3</b>add a provider key, or run on the free models</div>
+    </div>
+    <div class="alt" data-reveal>or read the code first &middot; <a href="/download/source">Postcode-app.zip</a></div>
+  </div>
+</section>
+</main>
+
+<div id="dlPop" class="pop" hidden>
+  <div class="pop-card" role="dialog" aria-modal="true" aria-label="Download Postcode">
+    <div class="pop-bar"><span>download</span><button class="pop-x" id="dlPopX" aria-label="Close">x</button></div>
+    <p class="pop-file">postcode installer.exe</p>
+    <p class="pop-note">One file, no installer wizard, no terminal. Double click it and the app window opens. It stores your data in your user folder.</p>
+    <button class="btn btn-primary btn-lg" id="dlPopGo" style="width:100%">Download and start</button>
+    <p class="pop-fine" id="dlPopFine">69 MB &middot; Windows 10 or newer</p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>~/postcode</span>
+    <span>local-first coding agent</span>
+    <a href="/landing">home</a>
+    <a href="/">app</a>
+    <a href="/download">download</a>
+  </div>
+</footer>
+
+<script src="/assets/vendor/gsap.min.js"></script>
+<script src="/assets/vendor/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var names = ['OpenAI','Anthropic','Gemini','Groq','DeepSeek','Mistral','Cerebras','Together','xAI',
+               'OpenRouter','Pollinations','NVIDIA','Moonshot','Perplexity','Hugging Face','Replicate',
+               'Fireworks','Nebius','SambaNova','Chutes','Baseten'];
+  var track = document.getElementById('marquee');
+  var row = names.map(function(n){ return n + '<i>&middot;</i>'; }).join('');
+  track.innerHTML = '<span>' + row + '</span><span>' + row + '</span>';
+
+  var nav = document.getElementById('nav'), bar = document.getElementById('progress'), ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      var y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 8);
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // download pop-up: one click on any download button, one button to go
+  var pop = document.getElementById('dlPop');
+  function openPop(){ pop.hidden = false; document.getElementById('dlPopGo').focus(); }
+  function closePop(){ pop.hidden = true; }
+  document.querySelectorAll('a[href="/download"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); openPop(); });
+  });
+  document.getElementById('dlPopX').onclick = closePop;
+  pop.addEventListener('click', function(e){ if(e.target === pop) closePop(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !pop.hidden) closePop(); });
+  document.getElementById('dlPopGo').onclick = function(){
+    var link = document.createElement('a');
+    link.href = '/download';
+    link.download = 'postcode installer.exe';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    document.getElementById('dlPopFine').textContent = 'downloading · run it, do not move it';
+    setTimeout(closePop, 900);
+  };
+
+  // type the terminal out line by line (CSS starts every line at opacity 0)
+  var lines = document.querySelectorAll('#termLines .l');
+  if(reduce || !window.gsap){
+    lines.forEach(function(l){ l.style.opacity = '1'; });
+  } else {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(lines, {opacity:1, duration:.18, stagger:.09, ease:'none', delay:.5});
+    gsap.from('[data-hero]', {y:20, opacity:0, duration:.75, stagger:.09, ease:'power3.out', delay:.1});
+    gsap.from('[data-term]', {y:34, opacity:0, duration:.9, ease:'power3.out', delay:.35});
+
+    gsap.utils.toArray('[data-reveal]').forEach(function(el){
+      gsap.from(el, {y:24, opacity:0, duration:.7, ease:'power2.out',
+        scrollTrigger:{trigger:el, start:'top 88%', once:true}});
+    });
+
+    // screenshots grow in and dim as they leave, nothing overlaps anything
+    gsap.utils.toArray('[data-shot]').forEach(function(card){
+      var img = card.querySelector('img');
+      gsap.fromTo(card, {opacity:.35, scale:.965}, {opacity:1, scale:1, ease:'none',
+        scrollTrigger:{trigger:card, start:'top 92%', end:'top 45%', scrub:true}});
+      gsap.to(card, {opacity:.5, ease:'none',
+        scrollTrigger:{trigger:card, start:'bottom 12%', end:'bottom top', scrub:true}});
+      if(img) gsap.fromTo(img, {scale:1.06}, {scale:1, ease:'none',
+        scrollTrigger:{trigger:card, start:'top bottom', end:'bottom top', scrub:true}});
+    });
+
+    // right-hand rows settle in one at a time while the left column stays put
+    gsap.utils.toArray('#rows .row').forEach(function(row){
+      gsap.from(row, {y:36, opacity:0, duration:.7, ease:'power2.out',
+        scrollTrigger:{trigger:row, start:'top 85%', once:true}});
+    });
+
+    // scrub the engine heading word by word
+    var words = document.getElementById('scrubWords');
+    if(words){
+      var spans = words.textContent.trim().split(/\s+/);
+      words.textContent = '';
+      spans.forEach(function(w, i){
+        var s = document.createElement('span');
+        s.textContent = w + (i < spans.length - 1 ? ' ' : '');
+        s.style.opacity = '.16';
+        words.appendChild(s);
+      });
+      gsap.to(words.children, {opacity:1, ease:'none', stagger:.12,
+        scrollTrigger:{trigger:words, start:'top 78%', end:'bottom 55%', scrub:true}});
+    }
+  }
+})();
+</script>
+</body>
+</html>
